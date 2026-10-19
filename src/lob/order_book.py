@@ -50,4 +50,24 @@ class OrderBook:
         if order.price not in book:
             book[order.price] = PriceLevel(order.price)
         book[order.price].add(order)
+    
+     def crosses(self, order):
+        if order.side == Side.BUY:
+            best_price = self.best_ask()
+            if best_price is None:
+                return False
+            return order.price >= best_price
+        else:
+            best_price = self.best_bid()
+            if best_price is None:
+                return False
+            return order.price <= best_price
 
+@dataclass
+class Fill:
+    price: int
+    quantity: int
+    maker_id: int
+    taker_id: int
+    taker_side: Side
+    
